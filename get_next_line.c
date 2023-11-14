@@ -6,9 +6,11 @@
 /*   By: nnourine <nnourine@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 10:22:38 by nnourine          #+#    #+#             */
-/*   Updated: 2023/11/14 10:23:19 by nnourine         ###   ########.fr       */
+/*   Updated: 2023/11/14 10:45:35 by nnourine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "get_next_line.h"
 
 char	*get_next_line(int fd)
 {

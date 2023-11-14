@@ -6,7 +6,8 @@
 /*   By: nnourine <nnourine@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 10:24:17 by nnourine          #+#    #+#             */
-/*   Updated: 2023/11/14 10:24:18 by nnourine         ###   ########.fr       */
+/*   Updated: 2023/11/14 10:45:53 by nnourine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "get_next_line.h"
