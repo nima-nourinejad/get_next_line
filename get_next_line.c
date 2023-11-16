@@ -6,22 +6,19 @@
 /*   By: nnourine <nnourine@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 10:22:38 by nnourine          #+#    #+#             */
-/*   Updated: 2023/11/16 15:24:12 by nnourine         ###   ########.fr       */
+/*   Updated: 2023/11/16 16:43:07 by nnourine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 //#include <stdio.h> //
 
-static char	*ufree(void *extra, void *buffer)
+static char	*ufree(void *extra, void *line)
 {
 	if (extra)
-	{
-		free (extra);
-		extra = 0;
-	}
-	if (buffer)
-		free (buffer);
+		ft_memset(extra, 0, (size_t)BUFFER_SIZE);
+	if (line)
+		free (line);
 	return (NULL);
 }
 
@@ -29,71 +26,29 @@ static char	*ufree(void *extra, void *buffer)
 char	*get_next_line(int fd)
 {
 	char		buffer[BUFFER_SIZE + 1];
-	static char	extra[BUFFER_SIZE + 1] = "";
+	static char	extra[BUFFER_SIZE];
 	char		*line;
 	char		*temp;
 	ssize_t		byt;
-	int 		i;
 
 	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, 0, 0) < 0)
-	{
-		i = 0;
-		while (i < BUFFER_SIZE + 1)
-		{
-			extra[i] = '\0';
-			i++;
-		}
-		return (NULL);
-	}
-	line = ft_strjoin(0, extra, 0);
+		return (ufree(extra, 0));
+	line = ft_strjoin(0, extra);
 	if (!line)
-	{
-		i = 0;
-		while (i < BUFFER_SIZE + 1)
-		{
-			extra[i] = '\0';
-			i++;
-		}
-		return (ufree(0, 0));
-	}
-	i = 0;
-	while (i < BUFFER_SIZE + 1)
-	{
-		extra[i] = '\0';
-		i++;
-	}
+		return (ufree(extra, 0));
+	ft_memset(extra, 0, (size_t)BUFFER_SIZE);
 	byt = 1;
 	while (ft_strchr(line, '\n') == 0 && byt)
 	{
 		byt = read(fd, buffer, BUFFER_SIZE);
 		if (byt < 0)
-		{
-			//printf( "extra : %s\n",extra);
-			i = 0;
-			while (i < BUFFER_SIZE + 1)
-			{
-				extra[i] = 0;
-				i++;
-			}
-			//printf( "extra : %s\n",extra);
-			i = 0;
-			free(line);
-			return (NULL);
-		}
+			return (ufree(extra, line));
 		buffer[byt] = '\0';
 		temp = line;
-		line = ft_strjoin(line, buffer, 0);
+		line = ft_strjoin(line, buffer);
 		free(temp);
 		if (!line)
-		{
-			i = 0;
-			while (i < BUFFER_SIZE + 1)
-			{
-				extra[i] = '\0';
-				i++;
-			}
-			return (ufree(0, 0));
-		}
+			return (ufree(extra, 0));
 	}
 	if (byt)
 	{
@@ -103,18 +58,10 @@ char	*get_next_line(int fd)
 				ft_strlen(ft_strchr(line, '\n') + 1));
 			*(ft_strchr(line, '\n') + 1) = '\0';
 			temp = line;
-			line = ft_strjoin(0, line, 0);
+			line = ft_strjoin(0, line);
 			free(temp);
 			if (!line)
-			{
-				i = 0;
-				while (i < BUFFER_SIZE + 1)
-				{
-					extra[i] = '\0';
-					i++;
-				}
-				return (ufree(0, 0));
-			}
+				return (ufree(extra, 0));
 		}
 	}
 	if (!line[0])

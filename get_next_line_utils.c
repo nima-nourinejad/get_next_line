@@ -6,7 +6,7 @@
 /*   By: nnourine <nnourine@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 10:24:17 by nnourine          #+#    #+#             */
-/*   Updated: 2023/11/16 10:53:27 by nnourine         ###   ########.fr       */
+/*   Updated: 2023/11/16 16:42:19 by nnourine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*ft_memcpy(char *d, char *s, size_t n)
 	return (d);
 }
 
-char	*ft_strjoin(char *s1, char *s2, int triger)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*d;
 	size_t	l1;
@@ -55,18 +55,12 @@ char	*ft_strjoin(char *s1, char *s2, int triger)
 
 	l1 = ft_strlen (s1);
 	l2 = ft_strlen (s2);
-	d = malloc((l1 + l2 + 1 + triger) * sizeof (char));
+	d = malloc((l1 + l2 + 1) * sizeof (char));
 	if (d == 0)
 		return (0);
 	ft_memcpy(d, s1, l1);
 	ft_memcpy(d + l1, s2, l2);
-	if (triger == 1)
-	{
-		d[l1 + l2] = '\n';
-		d[l1 + l2 + 1] = '\0';
-	}
-	else
-		d[l1 + l2] = '\0';
+	d[l1 + l2] = '\0';
 	return (d);
 }
 
@@ -86,4 +80,21 @@ char	*ft_strchr(char *s, char c)
 		i++;
 	}
 	return (0);
+}
+
+void	*ft_memset(void *ptr, int val, size_t size)
+{
+	size_t			i;
+	unsigned char	v;
+	unsigned char	*p;
+
+	i = 0;
+	v = (unsigned char) val;
+	p = (unsigned char *) ptr;
+	while (i < size)
+	{
+		*(p + i) = v;
+		i++;
+	}
+	return (ptr);
 }
