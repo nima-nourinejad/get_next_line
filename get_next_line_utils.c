@@ -6,7 +6,7 @@
 /*   By: nnourine <nnourine@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 10:24:17 by nnourine          #+#    #+#             */
-/*   Updated: 2023/11/16 16:42:19 by nnourine         ###   ########.fr       */
+/*   Updated: 2023/11/16 17:37:39 by nnourine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,10 @@ char	*ft_strjoin(char *s1, char *s2)
 	ft_memcpy(d, s1, l1);
 	ft_memcpy(d + l1, s2, l2);
 	d[l1 + l2] = '\0';
+	if (s1)
+		free(s1);
+	if (s2)
+		ft_memset(s2, 0, (size_t)BUFFER_SIZE + 1);
 	return (d);
 }
 

@@ -6,7 +6,7 @@
 /*   By: nnourine <nnourine@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 10:22:38 by nnourine          #+#    #+#             */
-/*   Updated: 2023/11/16 16:43:07 by nnourine         ###   ########.fr       */
+/*   Updated: 2023/11/16 17:57:18 by nnourine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,31 @@
 static char	*ufree(void *extra, void *line)
 {
 	if (extra)
-		ft_memset(extra, 0, (size_t)BUFFER_SIZE);
+		ft_memset(extra, 0, (size_t)BUFFER_SIZE + 1);
 	if (line)
 		free (line);
 	return (NULL);
 }
 
+static char	ft_extra(char *extra, char *line)
+{
+	ft_memcpy(extra, (ft_strchr(line, '\n') + 1),
+		ft_strlen(ft_strchr(line, '\n') + 1));
+	return ('\0');
+}
+
+static char	*line_check(char *line)
+{
+	if (!*line)
+		return (ufree(0, line));
+	return (line);
+}
 
 char	*get_next_line(int fd)
 {
 	char		buffer[BUFFER_SIZE + 1];
-	static char	extra[BUFFER_SIZE];
+	static char	extra[BUFFER_SIZE + 1];
 	char		*line;
-	char		*temp;
 	ssize_t		byt;
 
 	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, 0, 0) < 0)
@@ -36,7 +48,6 @@ char	*get_next_line(int fd)
 	line = ft_strjoin(0, extra);
 	if (!line)
 		return (ufree(extra, 0));
-	ft_memset(extra, 0, (size_t)BUFFER_SIZE);
 	byt = 1;
 	while (ft_strchr(line, '\n') == 0 && byt)
 	{
@@ -44,27 +55,16 @@ char	*get_next_line(int fd)
 		if (byt < 0)
 			return (ufree(extra, line));
 		buffer[byt] = '\0';
-		temp = line;
 		line = ft_strjoin(line, buffer);
-		free(temp);
 		if (!line)
 			return (ufree(extra, 0));
 	}
-	if (byt)
+	if (ft_strchr(line, '\n') != 0 && *(ft_strchr(line, '\n') + 1) != '\0')
 	{
-		if (*(ft_strchr(line, '\n') + 1) != '\0')
-		{
-			ft_memcpy(extra, (ft_strchr(line, '\n') + 1),
-				ft_strlen(ft_strchr(line, '\n') + 1));
-			*(ft_strchr(line, '\n') + 1) = '\0';
-			temp = line;
-			line = ft_strjoin(0, line);
-			free(temp);
-			if (!line)
-				return (ufree(extra, 0));
-		}
+		*(ft_strchr(line, '\n') + 1) = ft_extra(extra, line);
+		line = ft_strjoin(line, 0);
+		if (!line)
+			return (ufree(extra, 0));
 	}
-	if (!line[0])
-		return (ufree(0, line));
-	return (line);
+	return (line_check(line));
 }
