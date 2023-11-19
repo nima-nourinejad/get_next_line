@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nnourine <nnourine@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 10:22:38 by nnourine          #+#    #+#             */
-/*   Updated: 2023/11/19 11:54:39 by nnourine         ###   ########.fr       */
+/*   Updated: 2023/11/19 12:29:22 by nnourine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static char	*zero_free(void *extra, void *line)
 {
@@ -68,19 +68,19 @@ static char	*extra_remover(char *line, char *extra)
 
 char	*get_next_line(int fd)
 {
-	static char	extra[BUFFER_SIZE];
+	static char	extra[MAX_FD][BUFFER_SIZE];
 	char		*line;
 
-	if (BUFFER_SIZE < 1 || fd < 0)
+	if (BUFFER_SIZE < 1 || fd < 0 || fd > MAX_FD - 1)
 		return (NULL);
 	if (read(fd, 0, 0) < 0)
-		return (zero_free(extra, 0));
-	line = line_maker(fd, extra);
+		return (zero_free(extra[fd], 0));
+	line = line_maker(fd, extra[fd]);
 	if (!line)
-		return (zero_free(extra, 0));
-	line = extra_remover(line, extra);
+		return (zero_free(extra[fd], 0));
+	line = extra_remover(line, extra[fd]);
 	if (!line)
-		return (zero_free(extra, 0));
+		return (zero_free(extra[fd], 0));
 	if (!*line)
 		return (zero_free(0, line));
 	return (line);
